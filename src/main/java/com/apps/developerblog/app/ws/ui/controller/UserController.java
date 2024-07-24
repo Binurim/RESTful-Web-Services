@@ -1,5 +1,7 @@
 package com.apps.developerblog.app.ws.ui.controller;
 
+import com.apps.developerblog.app.ws.ui.model.response.UserRest;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,9 +13,16 @@ public class UserController  {
 //        return "get user was called";
 //    }
 
-    @GetMapping(path="/{userId}")
-    public String getUser(@PathVariable String userId){
-        return "get user was called with userId = " + userId;
+    @GetMapping(path = "/{userId}",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE})
+    public UserRest getUser(@PathVariable String userId) {
+        UserRest returnValue = new UserRest();
+        returnValue.setEmail("test@test.com");
+        returnValue.setFirstName("Binuri");
+        returnValue.setLastName("M");
+        return returnValue;
     }
 
     @GetMapping()
