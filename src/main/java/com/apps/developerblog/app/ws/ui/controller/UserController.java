@@ -1,5 +1,6 @@
 package com.apps.developerblog.app.ws.ui.controller;
 
+import com.apps.developerblog.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.apps.developerblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.apps.developerblog.app.ws.ui.model.response.UserRest;
 import jakarta.validation.Valid;
@@ -64,9 +65,21 @@ public class UserController  {
         return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
     }
 
-    @PutMapping
-    public String updateUser() {
-        return "update user was called";
+    @PutMapping(path = "/{userId}", consumes = {
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_JSON_VALUE},
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE})
+    public UserRest updateUser(@PathVariable String userId, @Valid @RequestBody UpdateUserDetailsRequestModel userDetails) {
+
+        UserRest storedUserDetails = users.get(userId);
+        storedUserDetails.setFirstName(userDetails.getFirstName());
+        storedUserDetails.setLastName(userDetails.getLastName());
+
+        users.put(userId, storedUserDetails);
+
+        return storedUserDetails;
     }
 
     @DeleteMapping
