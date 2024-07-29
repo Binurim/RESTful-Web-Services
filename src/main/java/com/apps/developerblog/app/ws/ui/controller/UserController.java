@@ -4,7 +4,10 @@ import com.apps.developerblog.app.ws.exception.UserServiceException;
 import com.apps.developerblog.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.apps.developerblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.apps.developerblog.app.ws.ui.model.response.UserRest;
+import com.apps.developerblog.app.ws.userservice.UserService;
+import com.apps.developerblog.app.ws.userservice.impl.UserServiceImpl;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,9 @@ public class UserController  {
 //    }
 
     Map<String, UserRest> users;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping(path = "/{userId}",
             produces = {
@@ -58,17 +64,11 @@ public class UserController  {
             MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails){
-        UserRest returnValue = new UserRest();
-        returnValue.setEmail(userDetails.getEmail());
-        returnValue.setFirstName(userDetails.getFirstName());
-        returnValue.setLastName(userDetails.getLastName());
 
-        String userId = UUID.randomUUID().toString();
-        returnValue.setUserId(userId);
+        // direct dependency of serviceImpl - not good for testing
+        // UserRest returnValue = new UserServiceImpl().createUser(userDetails);
 
-        if(users == null) users = new HashMap<>();
-        users.put(userId, returnValue);
-
+        UserRest returnValue = userService.createUser(userDetails);
         return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
     }
 
