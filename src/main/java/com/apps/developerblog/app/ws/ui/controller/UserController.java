@@ -1,5 +1,6 @@
 package com.apps.developerblog.app.ws.ui.controller;
 
+import com.apps.developerblog.app.ws.exception.UserServiceException;
 import com.apps.developerblog.app.ws.ui.model.request.UpdateUserDetailsRequestModel;
 import com.apps.developerblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.apps.developerblog.app.ws.ui.model.response.UserRest;
@@ -29,6 +30,12 @@ public class UserController  {
                     MediaType.APPLICATION_XML_VALUE,
                     MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
+
+//        String firstName = null;
+//        int firstNameLength = firstName.length();
+
+        if(true) throw new UserServiceException("A User service exception is thrown");
+
         if (users.containsKey(userId)) {
             return new ResponseEntity<UserRest>(users.get(userId), HttpStatus.OK);
         } else {
