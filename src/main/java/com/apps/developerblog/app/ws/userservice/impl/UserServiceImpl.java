@@ -1,8 +1,10 @@
 package com.apps.developerblog.app.ws.userservice.impl;
 
+import com.apps.developerblog.app.ws.shared.Utils;
 import com.apps.developerblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.apps.developerblog.app.ws.ui.model.response.UserRest;
 import com.apps.developerblog.app.ws.userservice.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -13,6 +15,14 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     Map<String, UserRest> users;
+    Utils utils;
+
+    public UserServiceImpl() {}
+
+    @Autowired
+    public UserServiceImpl(Utils utils) {
+        this.utils = utils;
+    }
 
     @Override
     public UserRest createUser(UserDetailsRequestModel userDetails) {
@@ -21,7 +31,7 @@ public class UserServiceImpl implements UserService {
         returnValue.setFirstName(userDetails.getFirstName());
         returnValue.setLastName(userDetails.getLastName());
 
-        String userId = UUID.randomUUID().toString();
+        String userId = utils.generateUserId();
         returnValue.setUserId(userId);
 
         if (users == null) users = new HashMap<>();
